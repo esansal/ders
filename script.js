@@ -13,7 +13,9 @@ const dersSaatleri = [
   { ders: "Ders 11", baslangic: "16:15", bitis: "16:55" }
 ];
 
-let kalanSure = 40 * 60; // Başlangıç süresi (40 dakika olarak ayarladım)
+let currentDersIndex = -1;
+let kalanSure = 0; // Başlangıçta kalan süre sıfır
+
 const now = new Date();
 
 // Saat kontrolü
@@ -22,17 +24,26 @@ function saatKontrol() {
   const currentMinute = now.getMinutes();
   const currentTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
 
-  // Hangi derste olduğunu belirleyelim
+  // Ders saatlerini kontrol et
   let dersMesaj = "Dersin saatini belirleyemedik.";
-  dersSaatleri.forEach(ders => {
-    if (currentTime >= ders.baslangic && currentTime < ders.bitis) {
-      dersMesaj = `${ders.ders} dersindesiniz!`;
+  for (let i = 0; i < dersSaatleri.length; i++) {
+    if (currentTime >= dersSaatleri[i].baslangic && currentTime < dersSaatleri[i].bitis) {
+      currentDersIndex = i;
+      dersMesaj = `${dersSaatleri[i].ders} dersindesiniz!`;
+      // Kalan süreyi hesapla
+      const [bitisSaat, bitisDakika] = dersSaatleri[i].bitis.split(":").map(Number);
+      const bitisZamani = new Date();
+      bitisZamani.setHours(bitisSaat, bitisDakika, 0, 0);
+
+      kalanSure = Math.floor((bitisZamani - now) / 1000); // Kalan süreyi saniye cinsinden hesapla
+      break;
     }
-  });
+  }
 
   // Dersin bitip bitmediğini kontrol et
-  if (currentTime >= dersSaatleri[0].bitis) {
+  if (currentDersIndex === -1 || currentTime >= dersSaatleri[dersSaatleri.length - 1].bitis) {
     dersMesaj = "Ders bitti!";
+    kalanSure = 0;
   }
 
   // Ekranda göstermek
@@ -41,14 +52,14 @@ function saatKontrol() {
 
 // Geri sayımı başlat
 function geriSayim() {
-  const dakika = Math.floor(kalanSure / 60);
-  const saniye = kalanSure % 60;
-
-  // Zamanı ekranda göster
-  document.getElementById('timer').textContent = 
-    `${dakika.toString().padStart(2, '0')}:${saniye.toString().padStart(2, '0')}`;
-
   if (kalanSure > 0) {
+    const dakika = Math.floor(kalanSure / 60);
+    const saniye = kalanSure % 60;
+
+    // Zamanı ekranda göster
+    document.getElementById('timer').textContent = 
+      `${dakika.toString().padStart(2, '0')}:${saniye.toString().padStart(2, '0')}`;
+
     kalanSure--;
   } else {
     clearInterval(interval);
