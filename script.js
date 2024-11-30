@@ -24,13 +24,13 @@ function saatKontrol() {
   const currentMinute = now.getMinutes();
   const currentTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
 
-  console.log(`Şu anki saat: ${currentTime}`); // Şu anki saati konsola yazdır
+  // Şu anki saati ekrana yazdıralım
+  document.getElementById('current-time').textContent = `Şu anki saat: ${currentTime}`;
 
   let dersMesaj = "Dersin saatini belirleyemedik.";
   let dersBulundu = false;
 
   for (let i = 0; i < dersSaatleri.length; i++) {
-    console.log(`Ders saatlerini kontrol ediyorum: ${dersSaatleri[i].baslangic} - ${dersSaatleri[i].bitis}`); // Ders saatlerini kontrol et
     if (currentTime >= dersSaatleri[i].baslangic && currentTime < dersSaatleri[i].bitis) {
       currentDersIndex = i;
       dersMesaj = `${dersSaatleri[i].ders} dersindesiniz!`;
@@ -41,9 +41,6 @@ function saatKontrol() {
 
       kalanSure = Math.floor((bitisZamani - now) / 1000); // Kalan süreyi saniye cinsinden hesapla
       dersBulundu = true;
-
-      console.log(`Ders bulundu: ${dersSaatleri[i].ders}`); // Dersin bulunduğunu konsola yazdır
-      console.log(`Kalan süre: ${kalanSure} saniye`); // Kalan süreyi konsola yazdır
       break;
     }
   }
