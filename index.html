@@ -3,28 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ders Süresi Geri Sayım</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
-        #timer {
-            font-size: 40px;
-            font-weight: bold;
-        }
-        #message {
-            font-size: 24px;
-            margin-top: 20px;
-        }
-    </style>
+    <title>Ders Geri Sayım</title>
 </head>
 <body>
-    <h1>Ders Süresi Geri Sayım</h1>
-    <div id="timer">00:00:00</div>
-    <div id="message">Dersin saatini belirleyemedik.</div>
-
-    <script src="script.js"></script>
+    <div>
+        <h1>Ders Süresi Geri Sayım</h1>
+        <div id="message">Dersin saatini belirleyemedik.</div>
+        <div id="current-time"></div> <!-- Şu anki saat burada görünecek -->
+        <div id="timer">00:00</div>
+    </div>
 </body>
 </html>
