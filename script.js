@@ -24,8 +24,9 @@ function saatKontrol() {
   const currentMinute = now.getMinutes();
   const currentTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
 
-  // Ders saatlerini kontrol et
   let dersMesaj = "Dersin saatini belirleyemedik.";
+  let dersBulundu = false;
+
   for (let i = 0; i < dersSaatleri.length; i++) {
     if (currentTime >= dersSaatleri[i].baslangic && currentTime < dersSaatleri[i].bitis) {
       currentDersIndex = i;
@@ -36,12 +37,13 @@ function saatKontrol() {
       bitisZamani.setHours(bitisSaat, bitisDakika, 0, 0);
 
       kalanSure = Math.floor((bitisZamani - now) / 1000); // Kalan süreyi saniye cinsinden hesapla
+      dersBulundu = true;
       break;
     }
   }
 
   // Dersin bitip bitmediğini kontrol et
-  if (currentDersIndex === -1 || currentTime >= dersSaatleri[dersSaatleri.length - 1].bitis) {
+  if (!dersBulundu || currentTime >= dersSaatleri[dersSaatleri.length - 1].bitis) {
     dersMesaj = "Ders bitti!";
     kalanSure = 0;
   }
@@ -68,5 +70,8 @@ function geriSayim() {
 }
 
 // Saat kontrolü her dakika yapılacak
-setInterval(saatKontrol, 60000);
-setInterval(geriSayim, 1000);
+setInterval(() => {
+  saatKontrol(); // Saatleri kontrol et
+}, 60000);
+
+setInterval(geriSayim, 1000); // Her saniye geri sayımı güncelle
